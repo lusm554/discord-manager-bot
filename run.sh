@@ -1,14 +1,7 @@
 #!/bin/bash
 
-FILE=./config/.env
+container_name="minecraft_discord_bot"
 
-if test -f "$FILE"; then
-  # set .env vars
-  export $(echo $(cat $FILE | sed 's/#.*//g'| xargs) | envsubst)
-else
-  echo "Config file \"$FILE\" not found."
-fi
+docker build -t $container_name .
 
-# run bot
-python3 src/main.py
-
+docker run --name $container_name -d $container_name 
