@@ -1,19 +1,30 @@
 import discord
+from discord.ext import commands
 from env import BOT_TOKEN
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='>')
 
-@client.event
+@bot.event
 async def on_ready():
-    print("We have looged in as {0.user}".format(client))
+    await bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.listening,
+                name=">help")
+            )
+    print('Running as {bot.user} (ID: {bot.user.id})')
+    print('------')
 
-@client.event
-async def on_message(msg):
-    if msg.author == client.user:
-        return
+@bot.command(brief='Run server', description='Run minecraft server')
+async def run(ctx):
+    await ctx.send('run')
 
-    if msg.content.startswith("/hello"):
-        await msg.channel.send("Hello!")
+@bot.command(brief='Stop server', description='Stop minecraft server')
+async def stop(ctx):
+    await ctx.send('stop')
 
-client.run(BOT_TOKEN)
+@bot.command(brief='Restart server', description='Restart minecraft server')
+async def restart(ctx):
+    await ctx.send('restart')
+
+bot.run(BOT_TOKEN)
 
